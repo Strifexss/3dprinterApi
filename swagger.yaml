@@ -1,0 +1,85 @@
+# Swagger/OpenAPI para impressora-api
+
+Este arquivo descreve as rotas de autenticação da API usando o padrão OpenAPI 3.0 (Swagger).
+
+openapi: 3.0.0
+info:
+  title: Impressora API
+  version: 1.0.0
+  description: API de autenticação com Laravel Sanctum
+servers:
+  - url: http://localhost/api
+paths:
+  /register:
+    post:
+      summary: Registrar novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+      responses:
+        '201':
+          description: Usuário criado
+        '422':
+          description: Dados inválidos
+  /login:
+    post:
+      summary: Login do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Token de autenticação
+        '422':
+          description: Dados inválidos
+  /logout:
+    post:
+      summary: Logout do usuário
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout realizado
+        '401':
+          description: Não autorizado
+  /user:
+    get:
+      summary: Retorna usuário autenticado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Dados do usuário
+        '401':
+          description: Não autorizado
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
