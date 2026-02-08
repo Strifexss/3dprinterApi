@@ -8,7 +8,6 @@ use App\Http\Requests\StoreClientRequest;
 use Illuminate\Http\Request;
 use App\Services\interfaces\ClientServiceInterface;
 use App\Http\Resources\ClientResource;
-use Illuminate\Support\Facades\DB;
 
 class ClientsController extends Controller
 {
