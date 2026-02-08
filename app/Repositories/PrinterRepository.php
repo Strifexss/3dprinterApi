@@ -3,8 +3,10 @@
 namespace App\Repositories;
 
 use App\Dto\Printers\PrinterSearchDTO;
+use App\Dto\Printers\PrinterStoreDTO;
 use App\Models\Printer;
 use App\Repositories\interfaces\PrinterRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class PrinterRepository implements PrinterRepositoryInterface
 {
@@ -32,29 +34,25 @@ class PrinterRepository implements PrinterRepositoryInterface
         return $query;
     }
 
-    public function store(\App\Dto\Printers\PrinterStoreDTO $printerStoreDTO)
+    public function store(PrinterStoreDTO $printerStoreDTO)
     {
-        try {
+        return DB::transaction(function () use ($printerStoreDTO) {
             return $this->model->create([
                 'user_id' => $printerStoreDTO->user_id,
                 'name' => $printerStoreDTO->name,
             ]);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        });
     }
 
     public function destroy(int $id): bool
     {
-        try {
+        return DB::transaction(function () use ($id) {
             $printer = $this->model->find($id);
             if ($printer) {
                 return $printer->delete();
             }
             return false;
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        });
     }
 
     public function findById(int $id)

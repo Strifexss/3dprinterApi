@@ -11,10 +11,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Inversão de dependência para PrinterService
         $this->app->bind(\App\Services\interfaces\PrinterServiceInterface::class, \App\Services\PrinterService::class);
-        // Inversão de dependência para PrinterRepository
         $this->app->bind(\App\Repositories\interfaces\PrinterRepositoryInterface::class, \App\Repositories\PrinterRepository::class);
+            $this->app->bind(\App\Services\interfaces\ClientServiceInterface::class, \App\Services\ClientService::class);
+            $this->app->bind(\App\Repositories\interfaces\ClientRepositoryInterface::class, \App\Repositories\ClientRepository::class);
     }
 
     /**

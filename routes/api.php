@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClientsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/printers/{id}', [PrintersController::class, 'show']);
     Route::post('/printers', [PrintersController::class, 'store']);
     Route::delete('/printers/{id}', [PrintersController::class, 'destroy']);
+
+    // Rotas de clients
+    Route::get('/clients', [ClientsController::class, 'index']);
+    Route::get('/clients/{id}', [ClientsController::class, 'show']);
+    Route::post('/clients', [ClientsController::class, 'store']);
+    Route::delete('/clients/{id}', [ClientsController::class, 'destroy']);
 });
 
