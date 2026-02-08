@@ -23,6 +23,13 @@ class StoreClientRequest extends FormRequest
             'extras' => 'nullable|array',
             'created_by' => 'nullable|uuid',
             'updated_by' => 'nullable|uuid',
+            'contatos' => 'nullable|array',
+            'contatos.*.nome' => 'required|string|max:255',
+            'contatos.*.tipo' => 'required|in:PRINCIPAL,SECUNDARIO',
+            'contatos.*.ddd' => 'nullable|string|max:3',
+            'contatos.*.telefone' => 'nullable|string|max:20',
+            'contatos.*.email' => 'nullable|email|max:255',
+            'contatos.*.notes' => 'nullable|string',
         ];
     }
 

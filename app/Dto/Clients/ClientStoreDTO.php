@@ -15,4 +15,5 @@ class ClientStoreDTO extends DTO
     public ?string $created_by = null;
     public ?string $updated_by = null;
     public ?string $fulltext_nome = null;
+    public ?array $contatos = null;
 }

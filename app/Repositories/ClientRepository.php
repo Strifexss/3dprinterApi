@@ -17,8 +17,10 @@ class ClientRepository implements ClientRepositoryInterface
     public function all(ClientSearchDTO $dto)
     {
         try {
-            $query = $this->model->newQuery();
+            $query = $this->model->newQuery()
+                ->with('contacts');
             $query = $this->filter($dto, $query);
+
             return $query->get();
         } catch (\Exception $e) {
             throw $e;
@@ -44,25 +46,24 @@ class ClientRepository implements ClientRepositoryInterface
 
     public function store(ClientStoreDTO $clientStoreDTO)
     {
-        return DB::transaction(function () use ($clientStoreDTO) {
-            return $this->model->create([
-                'id' => \Illuminate\Support\Str::uuid(),
-                'tenant_id' => $clientStoreDTO->tenant_id,
-                'nome' => $clientStoreDTO->nome,
-                'razao_social' => $clientStoreDTO->razao_social,
-                'cpf_cnpj' => $clientStoreDTO->cpf_cnpj,
-                'tipo_pessoa' => $clientStoreDTO->tipo_pessoa,
-                'extras' => $clientStoreDTO->extras,
-                'created_by' => $clientStoreDTO->created_by,
-                'updated_by' => $clientStoreDTO->updated_by,
-                'fulltext_nome' => $clientStoreDTO->fulltext_nome,
-            ]);
-        });
+        $client = $this->model->create([
+            'id' => \Illuminate\Support\Str::uuid(),
+            'tenant_id' => $clientStoreDTO->tenant_id,
+            'nome' => $clientStoreDTO->nome,
+            'razao_social' => $clientStoreDTO->razao_social,
+            'cpf_cnpj' => $clientStoreDTO->cpf_cnpj,
+            'tipo_pessoa' => $clientStoreDTO->tipo_pessoa,
+            'extras' => $clientStoreDTO->extras,
+            'created_by' => $clientStoreDTO->created_by,
+            'updated_by' => $clientStoreDTO->updated_by,
+            'fulltext_nome' => $clientStoreDTO->fulltext_nome,
+        ]);
+        return $client;
     }
 
     public function findById($id)
     {
-        return $this->model->find($id);
+        return $this->model->with('contacts')->find($id);
     }
 
     public function destroy($id): bool

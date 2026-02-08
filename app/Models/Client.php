@@ -26,4 +26,9 @@ class Client extends Model
         'updated_by',
         'fulltext_nome',
     ];
+
+    public function contacts()
+    {
+        return $this->hasMany(\App\Models\Contact::class, 'client_id', 'id');
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Requests\StoreClientRequest;
 use Illuminate\Http\Request;
 use App\Services\interfaces\ClientServiceInterface;
 use App\Http\Resources\ClientResource;
+use Illuminate\Support\Facades\DB;
 
 class ClientsController extends Controller
 {
@@ -18,15 +19,10 @@ class ClientsController extends Controller
     public function index(Request $request)
     {
         try {
-            $data = $request->all();
-            if ($request->user() && isset($request->user()->tenant_id)) {
-                $data['tenant_id'] = $request->user()->tenant_id;
-            }
-            $dto = new ClientSearchDTO($data);
-            $clients = $this->clientService->all($dto);
+            $clients = $this->clientService->all(new ClientSearchDTO($request->all()));
             return response()->json(ClientResource::collection($clients), 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'Erro ao buscar clientes.'], 500);
         }
     }
 
@@ -37,9 +33,9 @@ class ClientsController extends Controller
             if ($client) {
                 return response()->json(new ClientResource($client), 200);
             }
-            return response()->json(['error' => 'Client not found'], 404);
+            return response()->json(['error' => 'Cliente não encontrado.'], 404);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'Erro ao buscar cliente.'], 500);
         }
     }
 
@@ -49,7 +45,7 @@ class ClientsController extends Controller
             $client = $this->clientService->store(new ClientStoreDTO($request->validated()));
             return response()->json(new ClientResource($client), 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'Erro ao salvar o cliente.'], 500);
         }
     }
 
@@ -58,11 +54,11 @@ class ClientsController extends Controller
         try {
             $deleted = $this->clientService->destroy($id);
             if ($deleted) {
-                return response()->json(['message' => 'Client deleted'], 200);
+                return response()->json(['message' => 'Cliente removido com sucesso.'], 200);
             }
-            return response()->json(['error' => 'Client not found'], 404);
+            return response()->json(['error' => 'Cliente não encontrado.'], 404);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'Erro ao remover o cliente.'], 500);
         }
     }
 }
