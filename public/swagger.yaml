@@ -99,6 +99,35 @@ paths:
       responses:
         '200':
           description: Lista de impressoras
+          content:
+            application/json:
+              examples:
+                sucesso:
+                  summary: Exemplo de sucesso
+                  value:
+                    - id: "1"
+                      user_id: "u123"
+                      name: "Impressora A"
+                      modelo: "HP LaserJet"
+                      status: "ativa"
+                      created_at: "2026-02-08T10:00:00Z"
+                      updated_at: "2026-02-08T10:00:00Z"
+                    - id: "2"
+                      user_id: "u124"
+                      name: "Impressora B"
+                      modelo: "Epson EcoTank"
+                      status: "inativa"
+                      created_at: "2026-02-08T10:00:00Z"
+                      updated_at: "2026-02-08T10:00:00Z"
+        '422':
+          description: Dados inválidos
+          content:
+            application/json:
+              examples:
+                erro:
+                  summary: Exemplo de erro
+                  value:
+                    message: "Parâmetros inválidos"
     post:
       summary: Cadastra impressora
       tags:
@@ -133,8 +162,28 @@ paths:
       responses:
         '200':
           description: Impressora encontrada
+          content:
+            application/json:
+              examples:
+                sucesso:
+                  summary: Exemplo de sucesso
+                  value:
+                    id: "1"
+                    user_id: "u123"
+                    name: "Impressora A"
+                    modelo: "HP LaserJet"
+                    status: "ativa"
+                    created_at: "2026-02-08T10:00:00Z"
+                    updated_at: "2026-02-08T10:00:00Z"
         '404':
           description: Impressora não encontrada
+          content:
+            application/json:
+              examples:
+                erro:
+                  summary: Exemplo de erro
+                  value:
+                    message: "Impressora não encontrada"
     delete:
       summary: Remove impressora
       tags:
@@ -163,6 +212,42 @@ paths:
       responses:
         '200':
           description: Lista de clientes
+          content:
+            application/json:
+              examples:
+                sucesso:
+                  summary: Exemplo de sucesso
+                  value:
+                    - id: "1"
+                      tenant_id: "abc123"
+                      nome: "Empresa X"
+                      razao_social: "Empresa X Ltda"
+                      cpf_cnpj: "12345678900"
+                      tipo_pessoa: "JURIDICA"
+                      contatos:
+                        - nome: "João"
+                          tipo: "principal"
+                          ddd: "11"
+                          telefone: "999999999"
+                          email: "joao@empresa.com"
+                          notes: "Contato principal"
+                        - nome: "Maria"
+                          tipo: "secundario"
+                          ddd: "11"
+                          telefone: "888888888"
+                          email: "maria@empresa.com"
+                          notes: "Contato secundário"
+        '422':
+          description: Dados inválidos
+          content:
+            application/json:
+              examples:
+                erro:
+                  summary: Exemplo de erro
+                  value:
+                    message: "Parâmetros inválidos"
+                    errors:
+                      nome: ["O campo nome é obrigatório."]
     post:
       summary: Cadastra cliente
       tags:
@@ -197,8 +282,40 @@ paths:
       responses:
         '200':
           description: Cliente encontrado
+          content:
+            application/json:
+              examples:
+                sucesso:
+                  summary: Exemplo de sucesso
+                  value:
+                    id: "1"
+                    tenant_id: "abc123"
+                    nome: "Empresa X"
+                    razao_social: "Empresa X Ltda"
+                    cpf_cnpj: "12345678900"
+                    tipo_pessoa: "JURIDICA"
+                    contatos:
+                      - nome: "João"
+                        tipo: "principal"
+                        ddd: "11"
+                        telefone: "999999999"
+                        email: "joao@empresa.com"
+                        notes: "Contato principal"
+                      - nome: "Maria"
+                        tipo: "secundario"
+                        ddd: "11"
+                        telefone: "888888888"
+                        email: "maria@empresa.com"
+                        notes: "Contato secundário"
         '404':
           description: Cliente não encontrado
+          content:
+            application/json:
+              examples:
+                erro:
+                  summary: Exemplo de erro
+                  value:
+                    message: "Cliente não encontrado"
     delete:
       summary: Remove cliente
       tags:
@@ -263,7 +380,7 @@ components:
           type: string
         deleted_at:
           type: string
-        contatos:
+        contacts:
           type: array
           items:
             type: object
@@ -272,7 +389,7 @@ components:
                 type: string
               tipo:
                 type: string
-                enum: [PRINCIPAL, SECUNDARIO]
+                enum: [principal, secundario]
               ddd:
                 type: string
               telefone:

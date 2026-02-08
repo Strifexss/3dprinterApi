@@ -6,7 +6,6 @@ use App\Dto\Clients\ClientSearchDTO;
 use App\Dto\Clients\ClientStoreDTO;
 use App\Models\Client;
 use App\Repositories\interfaces\ClientRepositoryInterface;
-use Illuminate\Support\Facades\DB;
 
 class ClientRepository implements ClientRepositoryInterface
 {
@@ -16,16 +15,12 @@ class ClientRepository implements ClientRepositoryInterface
 
     public function all(ClientSearchDTO $dto)
     {
-        try {
-            $query = $this->model->newQuery()
-                ->with(['contacts' => function($q) {
-                    $q->where('tipo', 'principal');
-                }]);
+        $query = $this->model->newQuery()
+            ->with(['contacts' => function($q) {
+                $q->where('tipo', 'principal');
+            }]);
 
-            return $this->filter($dto, $query)->get();
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        return $this->filter($dto, $query)->get();
     }
 
     private function filter(ClientSearchDTO $dto, $query)
