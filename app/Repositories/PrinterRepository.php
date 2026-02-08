@@ -36,23 +36,19 @@ class PrinterRepository implements PrinterRepositoryInterface
 
     public function store(PrinterStoreDTO $printerStoreDTO)
     {
-        return DB::transaction(function () use ($printerStoreDTO) {
-            return $this->model->create([
-                'user_id' => $printerStoreDTO->user_id,
-                'name' => $printerStoreDTO->name,
-            ]);
-        });
+        return $this->model->create([
+            'user_id' => $printerStoreDTO->user_id,
+            'name' => $printerStoreDTO->name,
+        ]);
     }
 
     public function destroy(int $id): bool
     {
-        return DB::transaction(function () use ($id) {
-            $printer = $this->model->find($id);
-            if ($printer) {
-                return $printer->delete();
-            }
-            return false;
-        });
+        $printer = $this->model->find($id);
+        if ($printer) {
+            return $printer->delete();
+        }
+        return false;
     }
 
     public function findById(int $id)

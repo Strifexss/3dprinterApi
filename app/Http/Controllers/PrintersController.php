@@ -19,12 +19,10 @@ class PrintersController extends Controller
     public function index(Request $request)
     {
         try {
-            $dto = new PrinterSearchDTO($request->all());
-            $printers = $this->printerService->all($dto);
-        
+            $printers = $this->printerService->all(new PrinterSearchDTO($request->all()));
             return response()->json(PrinterResource::collection($printers), 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Erro interno no servidor'], 500);
         }
     }
     
@@ -35,33 +33,31 @@ class PrintersController extends Controller
             if ($printer) {
                 return response()->json(new PrinterResource($printer), 200);
             }
-            return response()->json(['error' => 'Printer not found'], 404);
+            return response()->json(['message' => 'Impressora não encontrada'], 404);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Erro interno no servidor'], 500);
         }
     }
 
     public function store(StorePrinterRequest $request)
     {
         try {
-            $dto = new PrinterStoreDTO($request->validated());
-            $printer = $this->printerService->store($dto);
+            $printer = $this->printerService->store(new PrinterStoreDTO($request->validated()));
             return response()->json(new PrinterResource($printer), 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Erro interno no servidor'], 500);
         }
     }
 
     public function destroy($id)
     {
         try {
-            $deleted = $this->printerService->destroy($id);
-            if ($deleted) {
+            if ($this->printerService->destroy($id)) {
                 return response()->json(null, 204);
             }
-            return response()->json(['error' => 'Printer not found'], 404);
+            return response()->json(['message' => 'Impressora não encontrada'], 404);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Erro interno no servidor'], 500);
         }
     }
 }

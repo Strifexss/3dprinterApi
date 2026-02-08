@@ -6,6 +6,7 @@ use App\Dto\Printers\PrinterSearchDTO;
 use App\Dto\Printers\PrinterStoreDTO;
 use App\Services\interfaces\PrinterServiceInterface;
 use App\Repositories\interfaces\PrinterRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class PrinterService implements PrinterServiceInterface
 {
@@ -23,12 +24,16 @@ class PrinterService implements PrinterServiceInterface
 
     public function store(PrinterStoreDTO $printerStoreDTO)
     {
-        return $this->printerRepository->store($printerStoreDTO);
+        return DB::transaction(function () use ($printerStoreDTO) {
+            return $this->printerRepository->store($printerStoreDTO);
+        });
     }
 
     public function destroy(int $id): bool
     {
-        return $this->printerRepository->destroy($id);
+        return DB::transaction(function () use ($id) {
+            return $this->printerRepository->destroy($id);
+        });
     }
 
     public function findById(int $id)
