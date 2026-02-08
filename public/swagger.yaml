@@ -263,3 +263,21 @@ components:
           type: string
         deleted_at:
           type: string
+        contatos:
+          type: array
+          items:
+            type: object
+            properties:
+              nome:
+                type: string
+              tipo:
+                type: string
+                enum: [PRINCIPAL, SECUNDARIO]
+              ddd:
+                type: string
+              telefone:
+                type: string
+              email:
+                type: string
+              notes:
+                type: string

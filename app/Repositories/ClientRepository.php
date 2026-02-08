@@ -18,10 +18,11 @@ class ClientRepository implements ClientRepositoryInterface
     {
         try {
             $query = $this->model->newQuery()
-                ->with('contacts');
-            $query = $this->filter($dto, $query);
+                ->with(['contacts' => function($q) {
+                    $q->where('tipo', 'principal');
+                }]);
 
-            return $query->get();
+            return $this->filter($dto, $query)->get();
         } catch (\Exception $e) {
             throw $e;
         }

@@ -56,4 +56,42 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Fluxo de Clientes e Contatos
+
+O sistema permite cadastrar clientes e seus contatos em um único payload.
+
+### Exemplo de criação de cliente com contatos
+
+```json
+{
+	"tenant_id": "a1b2c3d4-e5f6-7890-abcd-1234567890ab",
+	"nome": "Empresa Exemplo",
+	"razao_social": "Empresa Exemplo Ltda",
+	"cpf_cnpj": "12345678000199",
+	"tipo_pessoa": "J",
+	"extras": {},
+	"created_by": "b2c3d4e5-f6a1-7890-abcd-1234567890ab",
+	"updated_by": "b2c3d4e5-f6a1-7890-abcd-1234567890ab",
+	"contatos": [
+		{
+			"nome": "Contato Principal",
+			"tipo": "PRINCIPAL",
+			"ddd": "11",
+			"telefone": "999999999",
+			"email": "contato@empresa.com",
+			"notes": "Responsável pelo financeiro"
+		},
+		{
+			"nome": "Contato Secundário",
+			"tipo": "SECUNDARIO",
+			"notes": "Apenas para emergências"
+		}
+	]
+}
+```
+
+O campo `contatos` é opcional e pode conter múltiplos contatos. Os campos obrigatórios para cada contato são `nome` e `tipo`.
+
+Todas as operações de criação de cliente e contatos são transacionais: se algum erro ocorrer, nada será persistido.
