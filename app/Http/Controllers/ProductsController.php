@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dto\Products\ProductSearchDTO;
 use App\Dto\Products\ProductStoreDTO;
 use App\Http\Requests\ProductSearchRequest;
+use App\Http\Requests\StoreProductRequest;
 use App\Services\interfaces\ProductServiceInterface;
 use App\Http\Resources\ProductResource;
 
@@ -13,8 +14,6 @@ class ProductsController extends Controller
     public function __construct(
         private ProductServiceInterface $productService
     ) {}
-
-
 
     public function index(ProductSearchRequest $request)
     {
@@ -39,17 +38,17 @@ class ProductsController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         try {
-            $product = $this->productService->store(new ProductStoreDTO($request->all()));
+            $product = $this->productService->store(new ProductStoreDTO($request->validated()));
             return response()->json(new ProductResource($product), 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao salvar o produto.'], 500);
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreProductRequest $request, $id)
     {
         try {
             $product = $this->productService->update($id, new ProductStoreDTO($request->all()));

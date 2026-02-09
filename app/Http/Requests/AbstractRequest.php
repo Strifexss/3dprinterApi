@@ -12,6 +12,7 @@ abstract class AbstractRequest extends FormRequest
         if (is_array($data) && $this->user() && isset($this->user()->tenant_id)) {
             $data['tenant_id'] = $this->user()->tenant_id;
         }
+        
         return $data;
     }
 }

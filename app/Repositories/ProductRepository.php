@@ -44,14 +44,32 @@ class ProductRepository implements ProductRepositoryInterface
         if ($dto->tenant_id) {
             $query->where('tenant_id', $dto->tenant_id);
         }
-        if ($dto->name) {
-            $query->where('name', 'ilike', "%{$dto->name}%");
+        if ($dto->group_id) {
+            $query->where('group_id', $dto->group_id);
         }
         if ($dto->sku) {
             $query->where('sku', $dto->sku);
         }
-        if ($dto->group_id) {
-            $query->where('group_id', $dto->group_id);
+        if ($dto->name) {
+            $query->where('name', 'ilike', "%{$dto->name}%");
+        }
+        if ($dto->description) {
+            $query->where('description', 'ilike', "%{$dto->description}%");
+        }
+        if ($dto->unit) {
+            $query->where('unit', $dto->unit);
+        }
+        if ($dto->color) {
+            $query->where('color', $dto->color);
+        }
+        if ($dto->material) {
+            $query->where('material', $dto->material);
+        }
+        if ($dto->min_stock !== null) {
+            $query->where('min_stock', $dto->min_stock);
+        }
+        if ($dto->is_active !== null) {
+            $query->where('is_active', $dto->is_active);
         }
         return $query;
     }
@@ -78,7 +96,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function findById($id)
     {
-        return $this->model->find($id);
+        return $this->model->with('group')->find($id);
     }
 
     public function destroy($id): bool
