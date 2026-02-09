@@ -28,8 +28,7 @@ class ProductsController extends Controller
     public function show($id)
     {
         try {
-            $product = $this->productService->findById($id);
-            if ($product) {
+            if ($product = $this->productService->findById($id)) {
                 return response()->json(new ProductResource($product), 200);
             }
             return response()->json(['error' => 'Produto não encontrado.'], 404);
@@ -41,8 +40,11 @@ class ProductsController extends Controller
     public function store(StoreProductRequest $request)
     {
         try {
-            $product = $this->productService->store(new ProductStoreDTO($request->validated()));
-            return response()->json(new ProductResource($product), 201);
+            return response()->json(
+                new ProductResource($this->productService->store(
+                    new ProductStoreDTO($request->validated())
+                    ))
+            , 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao salvar o produto.'], 500);
         }
@@ -51,8 +53,7 @@ class ProductsController extends Controller
     public function update(StoreProductRequest $request, $id)
     {
         try {
-            $product = $this->productService->update($id, new ProductStoreDTO($request->all()));
-            if ($product) {
+            if ($product = $this->productService->update($id, new ProductStoreDTO($request->all()))) {
                 return response()->json(new ProductResource($product), 200);
             }
             return response()->json(['error' => 'Produto não encontrado.'], 404);
@@ -64,8 +65,7 @@ class ProductsController extends Controller
     public function destroy($id)
     {
         try {
-            $deleted = $this->productService->destroy($id);
-            if ($deleted) {
+            if ($this->productService->destroy($id)) {
                 return response()->json(['message' => 'Produto removido com sucesso.'], 200);
             }
             return response()->json(['error' => 'Produto não encontrado.'], 404);

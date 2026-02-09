@@ -13,6 +13,37 @@ class ProductRepository implements ProductRepositoryInterface
         private Product $model
     ){}
 
+    public function all(ProductSearchDTO $dto)
+    {
+        $query = $this->model->newQuery();
+        return $this->filter($dto, $query)->get();
+    }
+
+    public function findById($id)
+    {
+        return $this->model->with('group')->find($id);
+    }
+
+    public function store(ProductStoreDTO $productStoreDTO)
+    {
+        $product = $this->model->create([
+            'id' => \Illuminate\Support\Str::uuid(),
+            'group_id' => $productStoreDTO->group_id,
+            'tenant_id' => $productStoreDTO->tenant_id,
+            'sku' => $productStoreDTO->sku,
+            'name' => $productStoreDTO->name,
+            'description' => $productStoreDTO->description,
+            'unit' => $productStoreDTO->unit,
+            'color' => $productStoreDTO->color,
+            'material' => $productStoreDTO->material,
+            'min_stock' => $productStoreDTO->min_stock,
+            'is_active' => $productStoreDTO->is_active,
+            'created_by' => $productStoreDTO->created_by,
+            'updated_by' => $productStoreDTO->updated_by,
+        ]);
+        return $product;
+    }
+
     public function update($id, ProductStoreDTO $dto)
     {
         $product = $this->model->find($id);
@@ -33,10 +64,14 @@ class ProductRepository implements ProductRepositoryInterface
         return $product;
     }
 
-    public function all(ProductSearchDTO $dto)
+    public function destroy($id): bool
     {
-        $query = $this->model->newQuery();
-        return $this->filter($dto, $query)->get();
+        $product = $this->model->find($id);
+        if ($product) {
+            $product->delete();
+            return true;
+        }
+        return false;
     }
 
     private function filter(ProductSearchDTO $dto, $query)
@@ -72,40 +107,5 @@ class ProductRepository implements ProductRepositoryInterface
             $query->where('is_active', $dto->is_active);
         }
         return $query;
-    }
-
-    public function store(ProductStoreDTO $productStoreDTO)
-    {
-        $product = $this->model->create([
-            'id' => \Illuminate\Support\Str::uuid(),
-            'group_id' => $productStoreDTO->group_id,
-            'tenant_id' => $productStoreDTO->tenant_id,
-            'sku' => $productStoreDTO->sku,
-            'name' => $productStoreDTO->name,
-            'description' => $productStoreDTO->description,
-            'unit' => $productStoreDTO->unit,
-            'color' => $productStoreDTO->color,
-            'material' => $productStoreDTO->material,
-            'min_stock' => $productStoreDTO->min_stock,
-            'is_active' => $productStoreDTO->is_active,
-            'created_by' => $productStoreDTO->created_by,
-            'updated_by' => $productStoreDTO->updated_by,
-        ]);
-        return $product;
-    }
-
-    public function findById($id)
-    {
-        return $this->model->with('group')->find($id);
-    }
-
-    public function destroy($id): bool
-    {
-        $product = $this->model->find($id);
-        if ($product) {
-            $product->delete();
-            return true;
-        }
-        return false;
     }
 }
