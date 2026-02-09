@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\AbstractRequest;
 
-class ClientSearchRequest extends FormRequest
+class ClientSearchRequest extends AbstractRequest
 {
     public function authorize()
     {
@@ -23,9 +23,6 @@ class ClientSearchRequest extends FormRequest
     public function all($keys = null)
     {
         $data = parent::all($keys);
-        if ($this->user() && isset($this->user()->tenant_id)) {
-            $data['tenant_id'] = $this->user()->tenant_id;
-        }
         return $data;
     }
 }

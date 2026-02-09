@@ -1,3 +1,16 @@
+# 9. Multi-Tenancy e Tenant Global
+
+Por padrão, todas as entidades que possuem o campo `tenant_id` devem considerar registros com `tenant_id = null` como globais (acessíveis a todos os tenants). Ou seja, ao buscar entidades multi-tenant, sempre inclua na consulta:
+
+```php
+$query->where('tenant_id', $tenantId)
+    ->orWhereNull('tenant_id');
+```
+
+Assim, cada tenant acessa seus próprios registros e também os registros globais (com `tenant_id` nulo). Esse padrão deve ser seguido em todos os repositórios, services e buscas relacionadas a entidades multi-tenant.
+
+> **Importante:** As requests de busca (search) já atribuem automaticamente o `tenant_id` do usuário logado, garantindo o filtro correto em todas as operações.
+
 # Documentação de Estrutura de Programação e Boas Práticas
 
 ## 1. Estrutura do Projeto

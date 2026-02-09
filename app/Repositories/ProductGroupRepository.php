@@ -22,7 +22,8 @@ class ProductGroupRepository implements ProductGroupRepositoryInterface
     private function filter(ProductGroupSearchDTO $dto, $query)
     {
         if ($dto->tenant_id) {
-            $query->where('tenant_id', $dto->tenant_id);
+            $query->where('tenant_id', $dto->tenant_id)
+                ->orWhereNull('tenant_id');
         }
         if ($dto->name) {
             $query->where('name', 'ilike', "%{$dto->name}%");
@@ -57,7 +58,6 @@ class ProductGroupRepository implements ProductGroupRepositoryInterface
         ]);
         return $group;
     }
-
 
     public function findById($id)
     {

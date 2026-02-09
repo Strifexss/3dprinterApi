@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dto\ProductGroups\ProductGroupSearchDTO;
 use App\Dto\ProductGroups\ProductGroupStoreDTO;
-use Illuminate\Http\Request;
+use App\Http\Requests\ProductGroupSearchRequest;
 use App\Services\interfaces\ProductGroupServiceInterface;
 use App\Http\Resources\ProductGroupResource;
 
@@ -14,12 +14,13 @@ class ProductGroupsController extends Controller
         private ProductGroupServiceInterface $productGroupService
     ) {}
 
-    public function index(Request $request)
+    public function index(ProductGroupSearchRequest $request)
     {
         try {
-            $groups = $this->productGroupService->all(new ProductGroupSearchDTO($request->all()));
+                $groups = $this->productGroupService->all(new ProductGroupSearchDTO($request->validated()));
             return response()->json(ProductGroupResource::collection($groups), 200);
         } catch (\Exception $e) {
+            dd($e);
             return response()->json(['error' => 'Erro ao buscar grupos.'], 500);
         }
     }

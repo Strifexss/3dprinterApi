@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dto\Products\ProductSearchDTO;
 use App\Dto\Products\ProductStoreDTO;
-use Illuminate\Http\Request;
+use App\Http\Requests\ProductSearchRequest;
 use App\Services\interfaces\ProductServiceInterface;
 use App\Http\Resources\ProductResource;
 
@@ -16,10 +16,10 @@ class ProductsController extends Controller
 
 
 
-    public function index(Request $request)
+    public function index(ProductSearchRequest $request)
     {
         try {
-            $products = $this->productService->all(new ProductSearchDTO($request->all()));
+            $products = $this->productService->all(new ProductSearchDTO($request->validated()));
             return response()->json(ProductResource::collection($products), 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao buscar produtos.'], 500);

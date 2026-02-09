@@ -23,7 +23,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/printers', [PrintersController::class, 'store']);
     Route::delete('/printers/{id}', [PrintersController::class, 'destroy']);
 
-    // Rotas de clients
     Route::get('/clients', [ClientsController::class, 'index']);
     Route::get('/clients/{id}', [ClientsController::class, 'show']);
     Route::post('/clients', [ClientsController::class, 'store']);
@@ -31,6 +30,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('/products/{id}', [ProductsController::class, 'show']);
     Route::post('/products', [ProductsController::class, 'store']);
+    Route::get('/products', [ProductsController::class, 'index']);
     Route::put('/products/{id}', [ProductsController::class, 'update']);
     Route::delete('/products/{id}', [ProductsController::class, 'destroy']);
 

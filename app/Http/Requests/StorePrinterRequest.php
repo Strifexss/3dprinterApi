@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\AbstractRequest;
 
-class StorePrinterRequest extends FormRequest
+class StorePrinterRequest extends AbstractRequest
 {
     public function authorize()
     {

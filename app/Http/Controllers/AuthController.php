@@ -71,27 +71,27 @@ class AuthController extends Controller
          * )
          */
         public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        {
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
 
-        $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request->email)->first();
+            
+            if (! $user || ! Hash::check($request->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'email' => ['As credenciais estão incorretas.'],
+                ]);
+            }
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['As credenciais estão incorretas.'],
+            $token = $user->createToken('api-token')->plainTextToken;
+
+            return response()->json([
+                'user' => $user,
+                'token' => $token,
             ]);
         }
-
-        $token = $user->createToken('api-token')->plainTextToken;
-
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ]);
-    }
 
     // Logout
         /**
