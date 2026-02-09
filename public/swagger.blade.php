@@ -15,25 +15,27 @@
       margin-bottom: 16px;
     }
     .download-btn {
-      background: #1976d2;
+      background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
       color: #fff;
       border: none;
-      border-radius: 5px;
-      padding: 10px 22px;
-      font-size: 16px;
-      font-weight: 500;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.2s;
     }
     .download-btn:hover {
-      background: #125ea2;
+      background: linear-gradient(90deg, #0056b3 0%, #007bff 100%);
+      transform: translateY(-2px) scale(1.03);
     }
   </style>
 </head>
 <body>
   <div class="download-btn-container">
     <button class="download-btn" onclick="window.location.href='/swagger.yaml'">
-      Baixar Collection (swagger.yaml)
+      ⬇️ Baixar Collection (swagger.yaml)
     </button>
   </div>
   <div id="swagger-ui"></div>
