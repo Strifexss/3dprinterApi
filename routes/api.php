@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PrintersController;
-
+use App\Http\Controllers\ProductGroupsController;
+use App\Http\Controllers\ProductsController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -27,5 +28,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/clients/{id}', [ClientsController::class, 'show']);
     Route::post('/clients', [ClientsController::class, 'store']);
     Route::delete('/clients/{id}', [ClientsController::class, 'destroy']);
+
+    Route::get('/products/{id}', [ProductsController::class, 'show']);
+    Route::post('/products', [ProductsController::class, 'store']);
+    Route::put('/products/{id}', [ProductsController::class, 'update']);
+    Route::delete('/products/{id}', [ProductsController::class, 'destroy']);
+
+    Route::get('/product-groups', [ProductGroupsController::class, 'index']);
+    Route::get('/product-groups/{id}', [ProductGroupsController::class, 'show']);
+    Route::post('/product-groups', [ProductGroupsController::class, 'store']);
+    Route::put('/product-groups/{id}', [ProductGroupsController::class, 'update']);
+    Route::delete('/product-groups/{id}', [ProductGroupsController::class, 'destroy']);
 });
 
