@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\KanbanBoardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,11 +19,12 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::get('/kanban-boards', [\App\Http\Controllers\KanbanBoardController::class, 'index']);
-        Route::get('/kanban-boards/{id}', [\App\Http\Controllers\KanbanBoardController::class, 'show']);
-        Route::post('/kanban-boards', [\App\Http\Controllers\KanbanBoardController::class, 'store']);
-        Route::put('/kanban-boards/{id}', [\App\Http\Controllers\KanbanBoardController::class, 'update']);
-        Route::delete('/kanban-boards/{id}', [\App\Http\Controllers\KanbanBoardController::class, 'destroy']);
+    Route::get('/kanban-boards', [KanbanBoardController::class, 'index']);
+    Route::get('/kanban-boards/{id}', [KanbanBoardController::class, 'show']);
+    Route::post('/kanban-boards', [KanbanBoardController::class, 'store']);
+    Route::put('/kanban-boards/{id}', [KanbanBoardController::class, 'update']);
+    Route::delete('/kanban-boards/{id}', [KanbanBoardController::class, 'destroy']);
+
     Route::get('/printers', [PrintersController::class, 'index']);
     Route::get('/printers/{id}', [PrintersController::class, 'show']);
     Route::post('/printers', [PrintersController::class, 'store']);

@@ -14,9 +14,137 @@ tags:
     description: Endpoints de produtos
   - name: Grupos de Produtos
     description: Endpoints de grupos de produtos
+  - name: Kanban
+    description: Endpoints de movimentação do quadro Kanban
 servers:
   - url: http://127.0.0.1:8000/api
 paths:
+  /kanban-boards:
+    get:
+      summary: Lista movimentações do kanban
+      tags:
+        - Kanban
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de movimentações do kanban
+          content:
+            application/json:
+              examples:
+                sucesso:
+                  summary: Exemplo de sucesso
+                  value:
+                    - id: "1"
+                      tenant_id: "t1"
+                      printer_id: "p1"
+                      from_status: "A Fazer"
+                      to_status: "Em Progresso"
+                      changed_by_id: "u1"
+                      changed_at: "2026-02-08T10:00:00Z"
+                      notes: "Movido para progresso"
+                      created_at: "2026-02-08T10:00:00Z"
+                      updated_at: "2026-02-08T10:00:00Z"
+        '500':
+          description: Erro ao buscar kanban boards
+    post:
+      summary: Cadastra movimentação no kanban
+      tags:
+        - Kanban
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KanbanBoard'
+      responses:
+        '201':
+          description: Movimentação criada
+        '500':
+          description: Erro ao salvar kanban board
+
+  /kanban-boards/{id}:
+    get:
+      summary: Detalhe da movimentação do kanban
+      tags:
+        - Kanban
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Movimentação encontrada
+          content:
+            application/json:
+              examples:
+                sucesso:
+                  summary: Exemplo de sucesso
+                  value:
+                    id: "1"
+                    tenant_id: "t1"
+                    printer_id: "p1"
+                    from_status: "A Fazer"
+                    to_status: "Em Progresso"
+                    changed_by_id: "u1"
+                    changed_at: "2026-02-08T10:00:00Z"
+                    notes: "Movido para progresso"
+                    created_at: "2026-02-08T10:00:00Z"
+                    updated_at: "2026-02-08T10:00:00Z"
+        '404':
+          description: Kanban board não encontrado
+        '500':
+          description: Erro ao buscar kanban board
+    put:
+      summary: Atualiza movimentação do kanban
+      tags:
+        - Kanban
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KanbanBoard'
+      responses:
+        '200':
+          description: Movimentação atualizada
+        '404':
+          description: Kanban board não encontrado
+        '500':
+          description: Erro ao atualizar kanban board
+    delete:
+      summary: Remove movimentação do kanban
+      tags:
+        - Kanban
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Kanban board removido com sucesso
+        '404':
+          description: Kanban board não encontrado
+        '500':
+          description: Erro ao remover kanban board
   /products:
     get:
       summary: Lista produtos
@@ -583,10 +711,34 @@ paths:
 components:
   securitySchemes:
     bearerAuth:
+    
       type: http
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    KanbanBoard:
+      type: object
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        printer_id:
+          type: string
+        from_status:
+          type: string
+        to_status:
+          type: string
+        changed_by_id:
+          type: string
+        changed_at:
+          type: string
+        notes:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
     Printer:
       type: object
       properties:
