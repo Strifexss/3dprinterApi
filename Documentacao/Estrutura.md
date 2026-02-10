@@ -1,3 +1,186 @@
+# 12. Padrão de Service (Exemplo Kanban)
+
+O Service deve receber o Repository por interface, trabalhar com DTOs e garantir atomicidade das operações críticas usando transações. Veja exemplo:
+
+```php
+use App\Repositories\interfaces\KanbanBoardRepositoryInterface;
+use App\Services\interfaces\KanbanBoardServiceInterface;
+use App\Dto\KanbanBoards\KanbanBoardDto;
+use App\Dto\KanbanBoards\KanbanBoardSearchDto;
+use Illuminate\Support\Facades\DB;
+
+class KanbanBoardService implements KanbanBoardServiceInterface
+{
+    public function __construct(private KanbanBoardRepositoryInterface $repository) {}
+
+    public function all(KanbanBoardSearchDto $dto)
+    {
+        return $this->repository->all($dto);
+    }
+
+    public function find($id)
+    {
+        return $this->repository->find($id);
+    }
+
+    public function create(KanbanBoardDto $dto)
+    {
+        return DB::transaction(function () use ($dto) {
+            return $this->repository->create($dto);
+        });
+    }
+
+    public function update($id, KanbanBoardDto $dto)
+    {
+        return DB::transaction(function () use ($id, $dto) {
+            return $this->repository->update($id, $dto);
+        });
+    }
+
+    public function delete($id)
+    {
+        return DB::transaction(function () use ($id) {
+            return $this->repository->delete($id);
+        });
+    }
+}
+```
+
+# 13. Padrão de Repository (Exemplo Kanban)
+
+O Repository deve receber DTOs, aplicar filtros multi-tenant e garantir o uso correto do tenant_id global. Veja exemplo:
+
+```php
+use App\Models\KanbanBoard;
+use App\Dto\KanbanBoards\KanbanBoardDto;
+use App\Dto\KanbanBoards\KanbanBoardSearchDto;
+
+class KanbanBoardRepository implements KanbanBoardRepositoryInterface
+{
+    public function all(KanbanBoardSearchDto $dto)
+    {
+        $query = KanbanBoard::query();
+        // Filtro multi-tenant global
+        $query->where('tenant_id', $dto->tenant_id)
+              ->orWhereNull('tenant_id');
+        // Outros filtros
+        if ($dto->printer_id) {
+            $query->where('printer_id', $dto->printer_id);
+        }
+        // ... demais filtros ...
+        return $query->get();
+    }
+
+    public function find($id)
+    {
+        return KanbanBoard::findOrFail($id);
+    }
+
+    public function create(KanbanBoardDto $dto)
+    {
+        return KanbanBoard::create($dto->toArray());
+    }
+
+    public function update($id, KanbanBoardDto $dto)
+    {
+        $kanban = KanbanBoard::findOrFail($id);
+        $kanban->update($dto->toArray());
+        return $kanban;
+    }
+
+    public function delete($id)
+    {
+        $kanban = KanbanBoard::findOrFail($id);
+        return $kanban->delete();
+    }
+}
+```
+# 11. Padrão de Controller (Exemplo Kanban)
+
+As controllers devem seguir o padrão de uso de Service por interface, receber FormRequests customizadas, utilizar DTOs para transferência de dados, Resources para resposta e tratar erros com try/catch. Veja um exemplo baseado no fluxo do Kanban:
+
+```php
+use App\Http\Requests\KanbanBoards\StoreKanbanBoardRequest;
+use App\Http\Requests\KanbanBoards\UpdateKanbanBoardRequest;
+use App\Http\Requests\KanbanBoards\KanbanBoardSearchRequest;
+use App\Dto\KanbanBoards\KanbanBoardDto;
+use App\Dto\KanbanBoards\KanbanBoardSearchDto;
+use App\Http\Resources\KanbanBoardResource;
+use App\Services\interfaces\KanbanBoardServiceInterface;
+
+class KanbanBoardController extends Controller
+{
+    public function __construct(private KanbanBoardServiceInterface $service) {}
+
+    public function index(KanbanBoardSearchRequest $request)
+    {
+        try {
+            $kanbans = $this->service->all(new KanbanBoardSearchDto($request->validated()));
+            return response()->json(KanbanBoardResource::collection($kanbans), 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao buscar kanban boards.'], 500);
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $kanban = $this->service->find($id);
+            if ($kanban) {
+                return response()->json(new KanbanBoardResource($kanban), 200);
+            }
+            return response()->json(['error' => 'Kanban board não encontrado.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao buscar kanban board.'], 500);
+        }
+    }
+
+    public function store(StoreKanbanBoardRequest $request)
+    {
+        try {
+            $dto = new KanbanBoardDto($request->validated());
+            $created = $this->service->create($dto);
+            return response()->json(new KanbanBoardResource($created), 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao salvar kanban board.'], 500);
+        }
+    }
+
+    public function update(UpdateKanbanBoardRequest $request, $id)
+    {
+        try {
+            $dto = new KanbanBoardDto($request->validated());
+            $updated = $this->service->update($id, $dto);
+            if ($updated) {
+                return response()->json(new KanbanBoardResource($updated), 200);
+            }
+            return response()->json(['error' => 'Kanban board não encontrado.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao atualizar kanban board.'], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $deleted = $this->service->delete($id);
+            if ($deleted) {
+                return response()->json(['message' => 'Kanban board removido com sucesso.'], 200);
+            }
+            return response()->json(['error' => 'Kanban board não encontrado.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao remover kanban board.'], 500);
+        }
+    }
+}
+```
+
+> **Resumo:**
+> - Sempre use Service por interface (injeção no construtor)
+> - Use FormRequests customizadas (herdando de AbstractRequest)
+> - Utilize DTOs para entrada de dados
+> - Use Resources para saída de dados
+> - Trate erros com try/catch e retorne mensagens padronizadas
 # 10. AbstractRequest e Validação Multi-Tenant
 
 Para padronizar a validação e garantir que o campo `tenant_id` seja sempre atribuído corretamente nas requests, o projeto utiliza uma classe base chamada `AbstractRequest`.
