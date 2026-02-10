@@ -21,33 +21,57 @@ class KanbanBoardController extends Controller
 
     public function index(KanbanBoardSearchRequest $request)
     {
-        $searchDto = new KanbanBoardSearchDto($request->validated());
-        $kanbans = $this->service->all($searchDto);
-        return response()->json(KanbanBoardResource::collection($kanbans), 200);
+        try {
+            $kanbans = $this->service->all(new KanbanBoardSearchDto($request->validated()));
+            return response()->json(KanbanBoardResource::collection($kanbans), 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao buscar kanban boards.'], 500);
+        }
     }
 
     public function show($id)
     {
-        return response()->json($this->service->find($id));
+        try {
+            if ($kanban = $this->service->find($id)) {
+                return response()->json(new KanbanBoardResource($kanban), 200);
+            }
+            return response()->json(['error' => 'Kanban board não encontrado.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao buscar kanban board.'], 500);
+        }
     }
 
     public function store(StoreKanbanBoardRequest $request)
     {
-        $dto = new KanbanBoardDto($request->validated());
-        $created = $this->service->create($dto);
-        return response()->json($created, 201);
+        try {
+            $created = $this->service->create(new KanbanBoardDto($request->validated()));
+            return response()->json(new KanbanBoardResource($created), 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao salvar kanban board.'], 500);
+        }
     }
 
     public function update(UpdateKanbanBoardRequest $request, $id)
     {
-        $dto = new KanbanBoardDto($request->validated());
-        $updated = $this->service->update($id, $dto);
-        return response()->json($updated);
+        try {
+            if ($updated = $this->service->update($id, new KanbanBoardDto($request->validated()))) {
+                return response()->json(new KanbanBoardResource($updated), 200);
+            }
+            return response()->json(['error' => 'Kanban board não encontrado.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao atualizar kanban board.'], 500);
+        }
     }
 
     public function destroy($id)
     {
-        $this->service->delete($id);
-        return response()->json(null, 204);
+        try {
+            if ($this->service->delete($id)) {
+                return response()->json(['message' => 'Kanban board removido com sucesso.'], 200);
+            }
+            return response()->json(['error' => 'Kanban board não encontrado.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao remover kanban board.'], 500);
+        }
     }
 }
