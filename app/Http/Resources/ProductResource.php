@@ -19,6 +19,7 @@ class ProductResource extends JsonResource
             'color' => $this->color,
             'material' => $this->material,
             'min_stock' => $this->min_stock,
+                'stock' => $this->stock,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

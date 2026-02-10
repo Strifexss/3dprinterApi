@@ -24,6 +24,7 @@ class Product extends Model
         'color',
         'material',
         'min_stock',
+        'stock',
         'is_active',
         'created_by',
         'updated_by',
