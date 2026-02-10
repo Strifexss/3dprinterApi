@@ -12,6 +12,15 @@ class Printer extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'model',
+        'manufacturer',
+        'serial_number',
+        'technology',
+        'acquisition_date',
+        'warranty_until',
+        'status',
+        'location',
+        'notes',
     ];
 
     public function user()
