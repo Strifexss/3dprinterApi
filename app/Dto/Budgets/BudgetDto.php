@@ -11,6 +11,7 @@ class BudgetDto extends DTO
     public $description;
     public $client_id;
     public $internal_note = null;
+    public $price = null;
     public $created_at = null;
     public $updated_at = null;
 }

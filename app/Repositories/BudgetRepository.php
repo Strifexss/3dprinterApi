@@ -1,3 +1,4 @@
+   
 <?php
 namespace App\Repositories;
 
@@ -10,10 +11,27 @@ class BudgetRepository implements BudgetRepositoryInterface
 {
     public function all(BudgetSearchDto $dto)
     {
-        $query = Budget::query();
+        return $this->filter(Budget::query(), $dto);
+    }
+
+    public function filter($query, BudgetSearchDto $dto)
+    {
         $query->where('tenant_id', $dto->tenant_id)
               ->orWhereNull('tenant_id');
-        // Adicione outros filtros conforme necessário
+
+        if (!empty($dto->client_id)) {
+            $query->where('client_id', $dto->client_id);
+        }
+        if (!empty($dto->status)) {
+            $query->where('status', $dto->status);
+        }
+        if (!empty($dto->created_at)) {
+            $query->whereDate('created_at', $dto->created_at);
+        }
+        if (!empty($dto->updated_at)) {
+            $query->whereDate('updated_at', $dto->updated_at);
+        }
+
         return $query->get();
     }
 

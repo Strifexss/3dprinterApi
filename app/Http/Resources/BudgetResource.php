@@ -14,6 +14,7 @@ class BudgetResource extends JsonResource
             'description' => $this->description,
             'client_id' => $this->client_id,
             'internal_note' => $this->internal_note,
+            'price' => $this->price,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -15,8 +15,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('tenant_id');
             $table->uuid('budget_id');
-            $table->unsignedBigInteger('product_id');
+            $table->uuid('product_id');
             $table->integer('quantity');
+            $table->decimal('price', 10, 4)->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->foreign('budget_id')->references('id')->on('budgets');
             $table->foreign('product_id')->references('id')->on('products');

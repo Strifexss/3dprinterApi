@@ -12,6 +12,7 @@ class UpdateBudgetRequest extends AbstractRequest
             'description' => 'required|string',
             'client_id' => 'required|exists:clients,id',
             'internal_note' => 'nullable|string',
+            'price' => 'required|numeric',
         ];
     }
 }

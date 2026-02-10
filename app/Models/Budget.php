@@ -18,6 +18,7 @@ class Budget extends Model
         'description',
         'client_id',
         'internal_note',
+        'price',
     ];
 
     public function client(): BelongsTo

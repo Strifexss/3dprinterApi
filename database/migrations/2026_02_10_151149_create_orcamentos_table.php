@@ -16,7 +16,8 @@ return new class extends Migration
             $table->uuid('tenant_id');
             $table->enum('status', ['pending', 'approved', 'canceled']);
             $table->text('description');
-            $table->unsignedBigInteger('client_id');
+            $table->decimal('price', 10, 4)->default(0);
+            $table->uuid('client_id');
             $table->text('internal_note')->nullable();
             $table->timestamps();
             $table->foreign('client_id')->references('id')->on('clients');
