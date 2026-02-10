@@ -18,6 +18,11 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/kanban-boards', [\App\Http\Controllers\KanbanBoardController::class, 'index']);
+        Route::get('/kanban-boards/{id}', [\App\Http\Controllers\KanbanBoardController::class, 'show']);
+        Route::post('/kanban-boards', [\App\Http\Controllers\KanbanBoardController::class, 'store']);
+        Route::put('/kanban-boards/{id}', [\App\Http\Controllers\KanbanBoardController::class, 'update']);
+        Route::delete('/kanban-boards/{id}', [\App\Http\Controllers\KanbanBoardController::class, 'destroy']);
     Route::get('/printers', [PrintersController::class, 'index']);
     Route::get('/printers/{id}', [PrintersController::class, 'show']);
     Route::post('/printers', [PrintersController::class, 'store']);

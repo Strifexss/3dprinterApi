@@ -1,3 +1,27 @@
+# 10. AbstractRequest e Validação Multi-Tenant
+
+Para padronizar a validação e garantir que o campo `tenant_id` seja sempre atribuído corretamente nas requests, o projeto utiliza uma classe base chamada `AbstractRequest`.
+
+Todas as FormRequests customizadas devem estender `AbstractRequest` ao invés de `FormRequest` diretamente. Isso garante que, ao chamar `$request->validated()`, o campo `tenant_id` do usuário autenticado seja automaticamente incluído nos dados validados, facilitando o controle multi-tenant e evitando erros de omissão.
+
+Exemplo de uso:
+
+```php
+use App\Http\Requests\AbstractRequest;
+
+class StoreKanbanBoardRequest extends AbstractRequest
+{
+    public function rules()
+    {
+        return [
+            // ... regras de validação ...
+        ];
+    }
+}
+```
+
+> **Importante:** Nunca estenda diretamente de `FormRequest` em novas requests, sempre utilize `AbstractRequest` para manter o padrão e garantir o correto funcionamento do multi-tenancy.
+
 # 9. Multi-Tenancy e Tenant Global
 
 Por padrão, todas as entidades que possuem o campo `tenant_id` devem considerar registros com `tenant_id = null` como globais (acessíveis a todos os tenants). Ou seja, ao buscar entidades multi-tenant, sempre inclua na consulta:

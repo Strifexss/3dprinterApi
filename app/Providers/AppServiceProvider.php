@@ -10,6 +10,10 @@ class AppServiceProvider extends ServiceProvider
      * Register any application services.
      */
     public function register(): void
+            $this->app->bind(\App\Repositories\interfaces\KanbanBoardRepositoryInterface::class, \App\Repositories\KanbanBoardRepository::class);
+            $this->app->bind(\App\Services\interfaces\KanbanBoardServiceInterface::class, function ($app) {
+                return new \App\Services\KanbanBoardService($app->make(\App\Repositories\interfaces\KanbanBoardRepositoryInterface::class));
+            });
     {
         $this->app->bind(\App\Services\interfaces\PrinterServiceInterface::class, \App\Services\PrinterService::class);
         $this->app->bind(\App\Repositories\interfaces\PrinterRepositoryInterface::class, \App\Repositories\PrinterRepository::class);
