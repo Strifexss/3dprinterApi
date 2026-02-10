@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->decimal('stock', 10, 4)->default(0)->after('min_stock'); // estoque com 4 casas decimais
+              $table->decimal('min_stock', 10, 4)->default(0)->change(); // min_stock com 4 casas decimais
+              $table->decimal('stock', 10, 4)->default(0)->after('min_stock'); // estoque com 4 casas decimais
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('stock');
+              $table->decimal('min_stock', 10, 2)->default(0)->change(); // volta para 2 casas decimais
+              $table->dropColumn('stock');
         });
     }
 };
