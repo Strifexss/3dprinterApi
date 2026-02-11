@@ -16,6 +16,8 @@ tags:
     description: Endpoints de grupos de produtos
   - name: Kanban
     description: Endpoints de movimentação do quadro Kanban
+  - name: Orcamentos
+    description: Endpoints de orçamentos
 servers:
   - url: http://127.0.0.1:8000/api
 paths:
@@ -708,6 +710,138 @@ paths:
           description: Cliente removido
         '404':
           description: Cliente não encontrado
+  /budgets:
+    get:
+      summary: Lista orçamentos
+      tags:
+        - Orcamentos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de orçamentos
+          content:
+            application/json:
+              examples:
+                sucesso:
+                  summary: Exemplo de sucesso
+                  value:
+                    - id: "b1"
+                      tenant_id: "t1"
+                      status: "PENDENTE"
+                      description: "Orçamento de exemplo"
+                      client_id: "c1"
+                      internal_note: "Nota interna"
+                      price: 150.5
+                      items:
+                        - id: "bi1"
+                          product_id: "p1"
+                          quantity: 2
+                      created_at: "2026-02-08T10:00:00Z"
+                      updated_at: "2026-02-08T10:00:00Z"
+        '500':
+          description: Erro ao buscar orçamentos
+    post:
+      summary: Cadastra orçamento
+      tags:
+        - Orcamentos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        '201':
+          description: Orçamento criado
+        '500':
+          description: Erro ao salvar orçamento
+
+  /budgets/{id}:
+    get:
+      summary: Detalhe do orçamento
+      tags:
+        - Orcamentos
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Orçamento encontrado
+          content:
+            application/json:
+              examples:
+                sucesso:
+                  summary: Exemplo de sucesso
+                  value:
+                    id: "b1"
+                    tenant_id: "t1"
+                    status: "PENDENTE"
+                    description: "Orçamento de exemplo"
+                    client_id: "c1"
+                    internal_note: "Nota interna"
+                    price: 150.5
+                    items:
+                      - id: "bi1"
+                        product_id: "p1"
+                        quantity: 2
+                    created_at: "2026-02-08T10:00:00Z"
+                    updated_at: "2026-02-08T10:00:00Z"
+        '404':
+          description: Orçamento não encontrado
+        '500':
+          description: Erro ao buscar orçamento
+    put:
+      summary: Atualiza orçamento
+      tags:
+        - Orcamentos
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        '200':
+          description: Orçamento atualizado
+        '404':
+          description: Orçamento não encontrado
+        '500':
+          description: Erro ao atualizar orçamento
+    delete:
+      summary: Remove orçamento
+      tags:
+        - Orcamentos
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Orçamento removido com sucesso
+        '404':
+          description: Orçamento não encontrado
+        '500':
+          description: Erro ao remover orçamento
 components:
   securitySchemes:
     bearerAuth:
@@ -797,6 +931,48 @@ components:
                 type: string
               notes:
                 type: string
+
+    Budget:
+      type: object
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        status:
+          type: string
+        description:
+          type: string
+        client_id:
+          type: string
+        internal_note:
+          type: string
+        price:
+          type: number
+          format: float
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BudgetItem'
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    BudgetItem:
+      type: object
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        budget_id:
+          type: string
+        product_id:
+          type: string
+        quantity:
+          type: number
+          format: float
 
     Product:
       type: object
