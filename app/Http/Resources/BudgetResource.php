@@ -17,6 +17,7 @@ class BudgetResource extends JsonResource
             'price' => $this->price,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'items' => \App\Http\Resources\BudgetItemResource::collection($this->whenLoaded('items')),
         ];
     }
 }

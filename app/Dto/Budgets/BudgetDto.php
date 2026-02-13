@@ -14,4 +14,5 @@ class BudgetDto extends DTO
     public $price = null;
     public $created_at = null;
     public $updated_at = null;
+    public $items = null;
 }

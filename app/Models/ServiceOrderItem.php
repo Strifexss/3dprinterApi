@@ -5,24 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BudgetItem extends Model
+class ServiceOrderItem extends Model
 {
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $table = 'budget_items';
+    protected $table = 'service_order_items';
     const UPDATED_AT = null;
+
     protected $fillable = [
         'id',
         'tenant_id',
-        'budget_id',
+        'service_order_id',
         'product_id',
         'quantity',
-        'price',
+        'created_at',
     ];
 
-    public function budget(): BelongsTo
+    public function serviceOrder(): BelongsTo
     {
-        return $this->belongsTo(Budget::class);
+        return $this->belongsTo(ServiceOrder::class, 'service_order_id');
     }
 
     public function product(): BelongsTo

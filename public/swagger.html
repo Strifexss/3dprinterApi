@@ -32,9 +32,12 @@
 </head>
 <body>
   <div class="download-btn-container">
-    <button class="download-btn" onclick="window.location.href='/swagger.yaml'">
-      Baixar Collection (swagger.yaml)
-    </button>
+    <a class="download-btn" href="/swagger.yaml" download>
+      Baixar OpenAPI (swagger.yaml)
+    </a>
+    <a class="download-btn" href="/postman_collection.json" download style="margin-left:12px;">
+      Baixar Postman Collection
+    </a>
   </div>
   <div id="swagger-ui"></div>
   <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>

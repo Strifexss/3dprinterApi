@@ -1,0 +1,94 @@
+{
+  "info": {
+    "name": "Impressora API - Collection",
+    "description": "Collection básica gerada para os endpoints de orçamentos (budgets). Ajuste conforme necessário.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Listar orçamentos",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/budgets",
+          "host": ["{{baseUrl}}"],
+          "path": ["budgets"]
+        }
+      }
+    },
+    {
+      "name": "Criar orçamento",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" },
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tenant_id\": \"t1\",\n  \"status\": \"PENDENTE\",\n  \"description\": \"Orçamento de exemplo\",\n  \"client_id\": \"c1\",\n  \"internal_note\": \"Nota interna\",\n  \"price\": 150.5,\n  \"items\": [{ \"product_id\": \"p1\", \"quantity\": 2 }]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/budgets",
+          "host": ["{{baseUrl}}"],
+          "path": ["budgets"]
+        }
+      }
+    },
+    {
+      "name": "Detalhe do orçamento",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/budgets/{{id}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["budgets", "{{id}}"]
+        }
+      }
+    },
+    {
+      "name": "Atualizar orçamento",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" },
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"APROVADO\",\n  \"price\": 200.0\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/budgets/{{id}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["budgets", "{{id}}"]
+        }
+      }
+    },
+    {
+      "name": "Remover orçamento",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/budgets/{{id}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["budgets", "{{id}}"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000/api" },
+    { "key": "token", "value": "" }
+  ]
+}

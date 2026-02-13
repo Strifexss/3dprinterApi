@@ -11,24 +11,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(\App\Repositories\interfaces\KanbanBoardRepositoryInterface::class, \App\Repositories\KanbanBoardRepository::class);
-        $this->app->bind(\App\Services\interfaces\KanbanBoardServiceInterface::class, function ($app) {
-            return new \App\Services\KanbanBoardService($app->make(\App\Repositories\interfaces\KanbanBoardRepositoryInterface::class));
-        });
-        $this->app->bind(\App\Services\interfaces\PrinterServiceInterface::class, \App\Services\PrinterService::class);
-        $this->app->bind(\App\Repositories\interfaces\PrinterRepositoryInterface::class, \App\Repositories\PrinterRepository::class);
-        $this->app->bind(\App\Services\interfaces\ClientServiceInterface::class, \App\Services\ClientService::class);
-        $this->app->bind(\App\Repositories\interfaces\ClientRepositoryInterface::class, \App\Repositories\ClientRepository::class);
-        $this->app->bind(\App\Services\interfaces\ContactServiceInterface::class, function ($app) {
-            return new \App\Services\ContactService($app->make(\App\Repositories\interfaces\ContactRepositoryInterface::class));
-        });
-        $this->app->bind(\App\Repositories\interfaces\ContactRepositoryInterface::class, function ($app) {
-            return new \App\Repositories\ContactRepository();
-        });
-        $this->app->bind(\App\Services\interfaces\ProductServiceInterface::class, \App\Services\ProductService::class);
-        $this->app->bind(\App\Repositories\interfaces\ProductRepositoryInterface::class, \App\Repositories\ProductRepository::class);
-        $this->app->bind(\App\Services\interfaces\ProductGroupServiceInterface::class, \App\Services\ProductGroupService::class);
-        $this->app->bind(\App\Repositories\interfaces\ProductGroupRepositoryInterface::class, \App\Repositories\ProductGroupRepository::class);
+        // ...existing code...
+        $this->app->bind(\App\Services\interfaces\ItemReservationServiceInterface::class, \App\Services\ItemReservationService::class);
+        $this->app->bind(\App\Repositories\interfaces\ItemReservationRepositoryInterface::class, \App\Repositories\ItemReservationRepository::class);
     }
 
     /**
