@@ -17,7 +17,7 @@ class ClientRepository implements ClientRepositoryInterface
     {
         $query = $this->model->newQuery()
             ->with(['contacts' => function($q) {
-                $q->where('tipo', 'principal');
+                $q->where('tipo', 'PRINCIPAL');
             }]);
 
         return $this->filter($dto, $query)->get();

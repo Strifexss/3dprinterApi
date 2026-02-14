@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Repositories\ContactRepository;
+use App\Repositories\interfaces\ContactRepositoryInterface;
 
 class ContactService implements \App\Services\interfaces\ContactServiceInterface
 {
     protected $contactRepository;
 
-    public function __construct(ContactRepository $contactRepository)
+    public function __construct(ContactRepositoryInterface $contactRepository)
     {
         $this->contactRepository = $contactRepository;
     }
