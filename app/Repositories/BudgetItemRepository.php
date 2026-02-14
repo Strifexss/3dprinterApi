@@ -84,6 +84,6 @@ class BudgetItemRepository implements BudgetItemRepositoryInterface
             return;
         }
 
-        DB::table('budget_items')->insert($rows);
+        $this->model->insert($rows);
     }
 }

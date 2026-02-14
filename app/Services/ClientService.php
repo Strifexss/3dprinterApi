@@ -46,7 +46,9 @@ class ClientService implements ClientServiceInterface
 
     public function destroy($id): bool
     {
-        return $this->clientRepository->destroy($id);
+        return DB::transaction(function () use ($id) {
+            return $this->clientRepository->destroy($id);
+        });
     }
 
     public function findById($id)

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dto\Budgets\BudgetItemDto;
 use App\Dto\Budgets\BudgetItemSearchDto;
+use App\Dto\ItemReservations\ItemReservationDto;
 use App\Repositories\interfaces\BudgetItemRepositoryInterface;
 use App\Services\interfaces\BudgetItemServiceInterface;
 use Illuminate\Support\Facades\DB;
@@ -30,16 +31,15 @@ class BudgetItemService implements BudgetItemServiceInterface
     {
         return DB::transaction(function () use ($dto) {
             $item = $this->repository->create($dto);
-            // Create reservation if reservationService is available
             if ($this->reservationService) {
-                $this->reservationService->create([
+                $this->reservationService->create(new ItemReservationDto([
                     'tenant_id' => $dto->tenant_id,
                     'budget_id' => $dto->budget_id,
                     'product_id' => $dto->product_id,
-                    'quantity' => $dto->quantity ?? 1,
+                    'quantity' => $dto->quantity,
                     'status' => 'active',
                     'reservation_date' => now(),
-                ]);
+                ]));
             }
             return $item->load(['product', 'budget']);
         });
@@ -66,7 +66,6 @@ class BudgetItemService implements BudgetItemServiceInterface
     public function insertItems(array $rows): void
     {
         $this->repository->insertItems($rows);
-        // Bulk reservation insert if reservationService is available
         if ($this->reservationService) {
             $reservationRows = array_map(function ($itemRow) {
                 return [

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Dto\ItemReservations\ItemReservationDto;
+use App\Dto\ItemReservations\ItemReservationSearchDto;
 use App\Repositories\interfaces\ItemReservationRepositoryInterface;
 use App\Services\interfaces\ItemReservationServiceInterface;
 
@@ -9,9 +11,9 @@ class ItemReservationService implements ItemReservationServiceInterface
 {
     public function __construct(private ItemReservationRepositoryInterface $repository) {}
 
-    public function all()
+    public function all(ItemReservationSearchDto $dto)
     {
-        return $this->repository->all();
+        return $this->repository->all($dto);
     }
 
     public function find($id)
@@ -19,12 +21,12 @@ class ItemReservationService implements ItemReservationServiceInterface
         return $this->repository->find($id);
     }
 
-    public function create(array $data)
+    public function create(ItemReservationDto $data)
     {
         return $this->repository->create($data);
     }
 
-    public function update($id, array $data)
+    public function update($id, ItemReservationDto $data)
     {
         return $this->repository->update($id, $data);
     }
