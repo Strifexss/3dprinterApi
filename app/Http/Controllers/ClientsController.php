@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dto\Clients\ClientSearchDTO;
 use App\Dto\Clients\ClientStoreDTO;
+use App\Http\Requests\Clients\UpdateClientRequest;
 use App\Http\Requests\StoreClientRequest;
 use Illuminate\Http\Request;
 use App\Services\interfaces\ClientServiceInterface;
@@ -45,6 +46,19 @@ class ClientsController extends Controller
             return response()->json(new ClientResource($client), 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao salvar o cliente.'], 500);
+        }
+    }
+
+    public function update($id, UpdateClientRequest $request)
+    {
+        try {
+            $client = $this->clientService->update($id, new ClientStoreDTO($request->validated()));
+            if ($client) {
+                return response()->json(new ClientResource($client), 200);
+            }
+            return response()->json(['error' => 'Cliente não encontrado.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao atualizar o cliente.'], 500);
         }
     }
 

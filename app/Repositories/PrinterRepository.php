@@ -10,9 +10,38 @@ use Illuminate\Support\Facades\DB;
 
 class PrinterRepository implements PrinterRepositoryInterface
 {
-    public function __construct(
-        private Printer $model
-    ){}
+    /**
+     * @var Printer
+     */
+    private $model;
+
+    public function __construct(Printer $model)
+    {
+        $this->model = $model;
+    }
+
+    public function update(int $id, PrinterStoreDTO $printerStoreDTO)
+    {
+        $printer = $this->model->find($id);
+        if (!$printer) {
+            return null;
+        }
+        $printer->update([
+            'user_id' => $printerStoreDTO->user_id,
+            'name' => $printerStoreDTO->name,
+            'model' => $printerStoreDTO->model,
+            'manufacturer' => $printerStoreDTO->manufacturer,
+            'serial_number' => $printerStoreDTO->serial_number,
+            'technology' => $printerStoreDTO->technology,
+            'acquisition_date' => $printerStoreDTO->acquisition_date,
+            'warranty_until' => $printerStoreDTO->warranty_until,
+            'status' => $printerStoreDTO->status,
+            'location' => $printerStoreDTO->location,
+            'notes' => $printerStoreDTO->notes,
+        ]);
+        return $printer;
+    }
+    // construtor já definido acima
 
     public function all(PrinterSearchDTO $dto)
     {

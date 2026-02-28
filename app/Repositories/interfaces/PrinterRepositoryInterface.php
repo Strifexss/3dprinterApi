@@ -9,6 +9,7 @@ interface PrinterRepositoryInterface
 {
     public function all(PrinterSearchDTO $printerSearchDTO);
     public function store(PrinterStoreDTO $printerStoreDTO);
+    public function update(int $id, PrinterStoreDTO $printerStoreDTO);
     public function destroy(int $id): bool;
     public function findById(int $id);
 }

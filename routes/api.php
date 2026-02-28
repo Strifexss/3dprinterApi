@@ -31,11 +31,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/printers', [PrintersController::class, 'index']);
     Route::get('/printers/{id}', [PrintersController::class, 'show']);
     Route::post('/printers', [PrintersController::class, 'store']);
+    Route::put('/printers/{id}', [PrintersController::class, 'update']);
+    Route::patch('/printers/{id}', [PrintersController::class, 'update']);
     Route::delete('/printers/{id}', [PrintersController::class, 'destroy']);
 
     Route::get('/clients', [ClientsController::class, 'index']);
     Route::get('/clients/{id}', [ClientsController::class, 'show']);
     Route::post('/clients', [ClientsController::class, 'store']);
+    Route::put('/clients/{id}', [ClientsController::class, 'update']);
     Route::delete('/clients/{id}', [ClientsController::class, 'destroy']);
 
     Route::get('/products/{id}', [ProductsController::class, 'show']);

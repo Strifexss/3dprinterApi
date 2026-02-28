@@ -29,8 +29,7 @@ class PrintersController extends Controller
     public function show($id)
     {
         try {
-            $printer = $this->printerService->findById($id);
-            if ($printer) {
+            if ($printer = $this->printerService->findById($id)) {
                 return response()->json(new PrinterResource($printer), 200);
             }
             return response()->json(['message' => 'Impressora não encontrada'], 404);
@@ -54,6 +53,18 @@ class PrintersController extends Controller
         try {
             if ($this->printerService->destroy($id)) {
                 return response()->json(null, 204);
+            }
+            return response()->json(['message' => 'Impressora não encontrada'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro interno no servidor'], 500);
+        }
+    }
+
+    public function update(StorePrinterRequest $request, $id)
+    {
+        try {
+            if ($printer = $this->printerService->update($id, new PrinterStoreDTO($request->validated()))) {
+                return response()->json(new PrinterResource($printer), 200);
             }
             return response()->json(['message' => 'Impressora não encontrada'], 404);
         } catch (\Exception $e) {

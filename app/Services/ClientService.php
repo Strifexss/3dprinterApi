@@ -44,6 +44,17 @@ class ClientService implements ClientServiceInterface
         $this->contactService->createForClient($client->id, $dto->contatos);
     }
 
+    public function update($id, ClientStoreDTO $clientStoreDTO)
+{
+    return DB::transaction(function () use ($id, $clientStoreDTO) {
+        $client = $this->clientRepository->update($id, $clientStoreDTO);
+        if ($client) {
+            $this->syncContacts($client, $clientStoreDTO);
+        }
+        return $client;
+    });
+}
+
     public function destroy($id): bool
     {
         return DB::transaction(function () use ($id) {

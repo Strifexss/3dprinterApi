@@ -11,4 +11,5 @@ interface ClientServiceInterface
     public function store(ClientStoreDTO $clientStoreDTO);
     public function destroy($id): bool;
     public function findById($id);
+    public function update($id, ClientStoreDTO $clientStoreDTO);
 }

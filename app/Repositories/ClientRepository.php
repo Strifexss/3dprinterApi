@@ -57,6 +57,24 @@ class ClientRepository implements ClientRepositoryInterface
         return $client;
     }
 
+    public function update($id, ClientStoreDTO $clientStoreDTO)
+    {
+        $client = $this->model->find($id);
+        if ($client) {
+            $client->update([
+                'nome' => $clientStoreDTO->nome,
+                'razao_social' => $clientStoreDTO->razao_social,
+                'cpf_cnpj' => $clientStoreDTO->cpf_cnpj,
+                'tipo_pessoa' => $clientStoreDTO->tipo_pessoa,  
+                'extras' => $clientStoreDTO->extras,
+                'updated_by' => $clientStoreDTO->updated_by,
+                'fulltext_nome' => $clientStoreDTO->fulltext_nome,
+            ]);
+            return $client;
+        }
+        return null;
+    }
+
     public function findById($id)
     {
         return $this->model->with('contacts')->find($id);

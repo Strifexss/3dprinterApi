@@ -11,4 +11,5 @@ interface ClientRepositoryInterface
     public function store(ClientStoreDTO $clientStoreDTO);
     public function findById($id);
     public function destroy($id): bool;
+    public function update($id, ClientStoreDTO $clientStoreDTO);
 }

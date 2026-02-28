@@ -17,6 +17,13 @@ class PrinterService implements PrinterServiceInterface
         $this->printerRepository = $printerRepository;
     }
 
+    public function update(int $id, PrinterStoreDTO $printerStoreDTO)
+    {
+        return DB::transaction(function () use ($id, $printerStoreDTO) {
+            return $this->printerRepository->update($id, $printerStoreDTO);
+        });
+    }
+
     public function all(PrinterSearchDTO $searchDTO)
     {   
         return $this->printerRepository->all($searchDTO);
