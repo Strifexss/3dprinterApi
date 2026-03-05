@@ -3,12 +3,17 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use App\Models\ProductGroup;
 
 class ProductGroupSeeder extends Seeder
 {
     public function run(): void
     {
+        // Buscar o primeiro tenant disponível
+        $tenant = DB::table('tenants')->first();
+        $tenantId = $tenant ? $tenant->id : null;
+
         $groups = [
             [
                 'name' => 'Filamentos',
@@ -55,11 +60,17 @@ class ProductGroupSeeder extends Seeder
                 'description' => 'Solventes, álcool isopropílico, limpa bico, etc. para limpeza e pós-processamento',
                 'is_active' => true,
             ],
+            [
+                'name' => 'Materiais Especiais',
+                'description' => 'Materiais avançados ou especializados como filamentos compostos, fibra de carbono, etc.',
+                'is_active' => true,
+            ],
         ];
 
         foreach ($groups as $group) {
             ProductGroup::create(array_merge([
                 'id' => (string)\Illuminate\Support\Str::uuid(),
+                'tenant_id' => $tenantId,
             ], $group));
         }
     }

@@ -50,7 +50,6 @@ class ProductRepository implements ProductRepositoryInterface
         if (!$product) return null;
         $product->update([
             'group_id' => $dto->group_id,
-            'tenant_id' => $dto->tenant_id,
             'sku' => $dto->sku,
             'name' => $dto->name,
             'description' => $dto->description,

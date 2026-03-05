@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         // Seed tenant and user for local development
-        $this->call([\Database\Seeders\TenantUserSeeder::class, \Database\Seeders\ProductGroupSeeder::class]);
+        $this->call([
+            \Database\Seeders\TenantUserSeeder::class,
+            \Database\Seeders\ProductGroupSeeder::class,
+            \Database\Seeders\ProductSeeder::class,
+        ]);
     }
 }

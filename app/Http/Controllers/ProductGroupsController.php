@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Dto\ProductGroups\ProductGroupSearchDTO;
 use App\Dto\ProductGroups\ProductGroupStoreDTO;
 use App\Http\Requests\ProductGroupSearchRequest;
+use App\Http\Requests\StoreProductGroupRequest;
+use App\Http\Requests\UpdateProductGroupRequest;
 use App\Services\interfaces\ProductGroupServiceInterface;
 use App\Http\Resources\ProductGroupResource;
 
@@ -38,20 +40,20 @@ class ProductGroupsController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreProductGroupRequest $request)
     {
         try {
-            $group = $this->productGroupService->store(new ProductGroupStoreDTO($request->all()));
+            $group = $this->productGroupService->store(new ProductGroupStoreDTO($request->validated()));
             return response()->json(new ProductGroupResource($group), 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao salvar o grupo.'], 500);
         }
     }
 
-      public function update(Request $request, $id)
+      public function update(UpdateProductGroupRequest $request, $id)
     {
         try {
-            $group = $this->productGroupService->update($id, new ProductGroupStoreDTO($request->all()));
+            $group = $this->productGroupService->update($id, new ProductGroupStoreDTO($request->validated()));
             if ($group) {
                 return response()->json(new ProductGroupResource($group), 200);
             }

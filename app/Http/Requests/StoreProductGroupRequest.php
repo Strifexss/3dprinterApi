@@ -12,10 +12,12 @@ class StoreProductGroupRequest extends AbstractRequest
     }
 
     public function rules(): array
-    {
-        return [
-            // ...existing rules...
-        ];
-    }
+        {
+            return [
+                'name'        => 'required|string|unique:product_groups,name|max:255',
+                'description' => 'nullable|string',
+                'is_active'   => 'required|boolean',
+            ];
+        }
 
 }

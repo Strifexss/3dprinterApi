@@ -50,7 +50,6 @@ class ProductGroupRepository implements ProductGroupRepositoryInterface
         $group = $this->model->find($id);
         if (!$group) return null;
         $group->update([
-            'tenant_id' => $dto->tenant_id,
             'name' => $dto->name,
             'description' => $dto->description,
             'is_active' => $dto->is_active,
